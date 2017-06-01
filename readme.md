@@ -20,9 +20,15 @@
 ```shell
 boost analyze --workspace <workspace>
 boost stats --workspace <workspace>
-boost postprocess --target <target> --database <database>
+boost postprocess --target <target> --workspace <workspace>
 boost -h | --help
 boost --version
+
+Options:
+--target                          The target folder
+--workspace                       A geodatabse
+-h --help                         Show this screen.
+--version                         Show version.
 ```
 
 ## Development Usage
