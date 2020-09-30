@@ -15,6 +15,7 @@ Total runtime varies between 2-4 hours
 '''
 
 import arcpy
+from arcpy.conversion import FeatureClassToFeatureClass
 from .command import Command
 from boost.config import feature_classes
 
@@ -218,7 +219,8 @@ class Analyze(Command):
         arcpy.Identity_analysis(no_service_fc, identity_fc, identity_output)
 
         #: join unserviced address points with area information back to Address_Service_Final
-        fieldlist1 = ['FID_AddressPoints', 'CountyNbr_1', 'Area_Type_1', 'NAME_1']
+        addr_fc = feature_classes['address_points']
+        fieldlist1 = [f'FID_{addr_fc}', 'CountyNbr_1', 'Area_Type_1', 'NAME_1']
 
         #: Step 1: Create dictionary of fields and values to be joined
         joindict = {}
@@ -231,7 +233,7 @@ class Analyze(Command):
                 joindict[joinval] = [val1, val2, val3]
 
         #: Step 2: Specify Key Value field. If it exists in target, populate new fields with appropriate values
-        fieldlist2 = ['FID_AddressPoints', 'COUNTYNBR', 'AREA_TYPE', 'NAME']
+        fieldlist2 = [f'FID_{addr_fc}', 'COUNTYNBR', 'AREA_TYPE', 'NAME']
         with arcpy.da.UpdateCursor(layer, fieldlist2) as recs:
             for rec in recs:
                 keyval = rec[0]
