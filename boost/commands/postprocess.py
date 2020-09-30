@@ -74,18 +74,20 @@ class PostProcess(Command):
 
                 #: aggregate data by area
                 with arcpy.da.SearchCursor(table, '*') as cur:
-                    if geometry_type == self.geometry_types[0]:
+                    if geometry_type == self.geometry_types[0]:  #: Area
                         for objectid, frequency, tier, name in cur:
                             data.setdefault(name, {})
 
                             data[name][tier] = frequency
-                    else:
-                        for objectid, frequency, tier, county_number, name, total in cur:
+                    else:  #: County
+                        for objectid, frequency, tier, county_number, name in cur:  #: Removed total from unpack list; change in arcpy function that created the table?
+                            if not name:
+                                name = 'NULL'
                             data.setdefault(name, {})
 
                             data[name][tier] = frequency
 
-                with open(target_path, 'wb') as file:
+                with open(target_path, 'w', newline='\n') as file:
                     writer = csv.writer(file)
                     writer.writerow(csv_fields)
 
