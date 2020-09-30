@@ -37,7 +37,7 @@ def main():
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.
-    for k, v in options.iteritems():
+    for k, v in options.items():
         if k[0] in ['-', '<', '['] or not v or not hasattr(boost.commands, k):
             continue
 
