@@ -38,7 +38,8 @@ class Stats(Command):
         '''
         print('Calculating Maximum Upload and Download Speeds for Addresses...')
         try:
-            arcpy.Statistics_analysis(address_points, feature_classes['msba'], [['MaxDown', 'MAX'], ['MaxUp', 'MAX']], 'FID_AddressPoints')
+            addr_fc = feature_classes['address_points']
+            arcpy.Statistics_analysis(address_points, feature_classes['msba'], [['MaxDown', 'MAX'], ['MaxUp', 'MAX']], f'FID_{addr_fc}')
         except:
             print(arcpy.GetMessages())
         try:
@@ -59,13 +60,15 @@ class Stats(Command):
                     row[0] = '{}|{}'.format(row[1], row[2])
                     cursor.updateRow(row)
 
-            arcpy.Statistics_analysis(layer, out_name, [['FID_AddressPoints', 'Count']], ['Name_Area'])
+            addr_fc = feature_classes['address_points']
+            arcpy.Statistics_analysis(layer, out_name, [[f'FID_{addr_fc}', 'Count']], ['Name_Area'])
         except:
             print(arcpy.GetMessages())
         #: find number of address points in each area by area type (Municipality, Unincorporated, Other)
         print('Calculating Address Count By Area Type...')
         try:
-            arcpy.Statistics_analysis(layer, out_type, [['FID_AddressPoints', 'Count']], ['AREA_TYPE'])
+            addr_fc = feature_classes['address_points']
+            arcpy.Statistics_analysis(layer, out_type, [[f'FID_{addr_fc}', 'Count']], ['AREA_TYPE'])
         except:
             print(arcpy.GetMessages())
         #: find number of address points in each area by County
@@ -73,7 +76,8 @@ class Stats(Command):
         #: This step gets an address count using the entire County's area
         print('Calculating Address Count By County...')
         try:
-            arcpy.Statistics_analysis(layer, out_county, [['FID_AddressPoints', 'Count']], ['COUNTYNBR'])
+            addr_fc = feature_classes['address_points']
+            arcpy.Statistics_analysis(layer, out_county, [[f'FID_{addr_fc}', 'Count']], ['COUNTYNBR'])
         except:
             print(arcpy.GetMessages())
 
@@ -154,7 +158,8 @@ class Stats(Command):
     def join_tables(self, target, join):
         '''join area data (area name, type, county) to MSBA statistics generated above
         this custom join function is much faster than the JoinField tool'''
-        fieldlist = ['FID_AddressPoints', 'NAME', 'AREA_TYPE', 'COUNTYNBR']
+        addr_fc = feature_classes['address_points']
+        fieldlist = [f'FID_{addr_fc}', 'NAME', 'AREA_TYPE', 'COUNTYNBR']
 
         #: Step 1: Create dictionary of fields and values to be joined
         joindict = {}
