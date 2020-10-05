@@ -37,7 +37,7 @@ First, edit the values in `config.py` for the existing data. These datasets must
 
 The Address Points Layer will affect the accuracy of the counts. A large apartment building with just a single point will lead to an under-representation of coverage for that area. A rural county with less high-speed coverage that sends a huge bunch of address points that we didn't have on previous runs will (correctly) skew the results back down as addresses that weren't properly included now are.
 
-To get the full output, you must run the three commands in order:
+To get the full output, you must run the three commands in order (the `analyze` step may take 1.5-3 hours) :
 ```shell
 boost analyze --workspace c:\temp\workspace.gdb
 boost stats --workspace c:\temp\workspace.gdb
