@@ -13,7 +13,7 @@
 1. `activate environment_name`
 1. `git clone https://github.com/agrc/broadband-cli.git`
 1. `cd broadband-cli`
-1. `pip install ./`
+1. `pip install -e ./`
 
 ## Usage
 
